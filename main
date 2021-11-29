@@ -1,0 +1,75 @@
+import pygame
+pygame.init()  
+pygame.display.set_caption("sprite sheet")  # sets the window title
+screen = pygame.display.set_mode((800, 800))  # creates game screen
+screen.fill((0,0,0))
+clock = pygame.time.Clock() #set up clock
+checkmate = False #variable to run our game loop
+
+#CONSTANTS
+
+#MAP: 1 is grass, 2 is brick
+map = [[0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [2, 2, 2, 2, 2, 2, 2, 2],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [1, 1, 1, 1, 1, 1, 1, 1],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0]]
+       
+
+red_pawn = pygame.image.load('RedPawn.png') #load your spritesheet
+white_pawn = pygame.image.load('WhitePawn.png') #load your spritesheet
+background = pygame.image.load('Chess board.png')#loads background
+while not checkmate:
+    
+#player variables
+
+
+
+
+    
+   
+    #COLLISION
+    
+  
+    
+    
+    #stop falling if on bottom of game screen
+    
+    
+    #gravity
+   
+    
+
+        
+    #ANIMATION-------------------------------------------------------------------
+        
+    # Update Animation Information
+
+    # RENDER--------------------------------------------------------------------------------
+    # Once we've figured out what frame we're on and where we are, time to render.
+            
+    screen.fill((0,0,0)) #wipe screen so it doesn't smear
+    screen.blit(background, (0,0))
+    for i in range (8):
+        for j in range(8):
+            if map[i][j]==1:
+                screen.blit(red_pawn, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==2:
+                screen.blit(white_pawn, (j*100, i*100), (0, 0, 100, 100))
+    
+    
+
+    pygame.display.flip()#this actually puts the pixel on the screen
+    
+#end game loop------------------------------------------------------------------------------
+pygame.quit()
