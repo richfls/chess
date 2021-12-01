@@ -1,0 +1,18 @@
+import pygame
+red_pawn = pygame.image.load('RedPawn2.png') #load your spritesheet
+white_pawn = pygame.image.load('WhitePawn.png') #load your spritesheet
+background = pygame.image.load('Chess board.png')#loads background
+whiterook = pygame.image.load('WhiteRook.png')
+redrook = pygame.image.load('RedRook2.png')
+whitequeen = pygame.image.load('WhiteQueen.png')
+redqueen = pygame.image.load('RedQueen.png')
+whiteking = pygame.image.load('WhiteKing.png')
+redking = pygame.image.load('RedKing3.png')
+whitebishop = pygame.image.load('WhiteBishop.png')
+redbishop = pygame.image.load('RedBishop.png')
+redknight = pygame.image.load('RedKnight.png')
+whiteknight = pygame.image.load('WhiteKnight.png')
+
+
+
+white=(255,255,255)
