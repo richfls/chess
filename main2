@@ -1,0 +1,76 @@
+import pygame
+from schess import *
+pygame.init()  
+pygame.display.set_caption("sprite sheet")  # sets the window title
+screen = pygame.display.set_mode((800, 800))  # creates game screen
+screen.fill((0,0,0))
+clock = pygame.time.Clock() #set up clock
+checkmate = False #variable to run our game loop
+
+
+#MAP:
+map = [[3, 4, 5, 6, 7, 5, 4, 3],
+       
+       [2, 2, 2, 2, 2, 2, 2, 2],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [1, 1, 1, 1, 1, 1, 1, 1],
+       
+       [8, 9, 10, 11, 12, 10, 9, 8]]
+       
+while not checkmate:
+    event = pygame.event.wait()
+    if event.type == pygame.MOUSEBUTTONDOWN:
+      if pygame.MOUSEBUTTONDOWN:
+            print("click")
+    if event.type == pygame.MOUSEMOTION: #check if mouse moved
+        mousePos = event.pos #refreshes mouse position
+        print("mouse position: (",mousePos[0]," , ",mousePos[1], ")")
+
+
+    #COLLISION
+    
+
+    # RENDER--------------------------------------------------------------------------------
+    screen.fill((0,0,0)) #wipe screen so it doesn't smear
+    screen.blit(background, (0,0))
+    for i in range (8):
+        for j in range(8):
+            if map[i][j]==1:
+                screen.blit(red_pawn, (j*100, i*100), (0, 0, 100, 100))
+                pygame.draw.rect(screen, white,[j*100, i*100, 20, 20],1)
+            if map[i][j]==2:
+                screen.blit(white_pawn, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==3:
+                screen.blit(whiterook, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==4:
+                screen.blit(whiteknight, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==5:
+                screen.blit(whitebishop, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==6:
+                screen.blit(whitequeen, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==7:
+                screen.blit(whiteking, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==8:
+                screen.blit(redrook, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==9:
+                screen.blit(redknight, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==10:
+                screen.blit(redbishop, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==11:
+                screen.blit(redqueen, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==12:
+                screen.blit(redking, (j*100, i*100), (0, 0, 100, 100))
+    
+
+    pygame.display.flip()#this actually puts the pixel on the screen
+    
+#end game loop------------------------------------------------------------------------------
+pygame.quit()
