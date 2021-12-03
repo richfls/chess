@@ -1,0 +1,174 @@
+import pygame
+from math import *
+import time
+pygame.init()  
+pygame.display.set_caption("sprite sheet")  # sets the window title
+screen = pygame.display.set_mode((1000, 800))  # creates game screen
+screen.fill((0,0,0))
+clock = pygame.time.Clock() #set up clock
+checkmate = False #variable to run our game loop
+
+
+white=(255,255,255)
+PIECEWIDTH = 100
+#text to screen setup
+pygame.display.set_caption('Show Text')
+font = pygame.font.Font('freesansbold.ttf', 32)
+
+#text input------------------------------------------
+
+#print('Enter your name Comrades:')
+#n = input()
+#print('Hello, ' + n)
+#= int(input("enter time::::"))
+t = 100
+
+#End of text input----------------------------------
+
+
+#Timer---------------------------------------------------
+def countdown(t):
+    
+   #while t:
+     mins, secs = divmod(t, 60)
+     timer = '{:02d}:{:02d}'.format(mins, secs)
+     print(timer, end="\r")
+     print('Spaghetti')  
+     time.sleep(1)
+     t -= 1
+     return t       
+   #
+#Timer end-------------------------------------------------
+
+#text = font.render(countdown(int(t)), True, (0,255,0), (0,0,255))
+#Pieces start-----------------------------------------------
+class pieces:
+    def __init__(self,xpos,ypos):
+
+        self.xpos = xpos
+        self.ypos = ypos
+        self.lifted = False
+        #self.isWhite #save for later
+    def isClicked(self,x,y):
+        if pygame.MOUSEBUTTONDOWN:
+            if (sqrt(self.xpos-x)**2 + (self.ypos-y)**2)<= 50:#check if the distance b/t (x, y) and (self.xpos, self.ypos) is LESS than 50
+            
+                self.lifted = True #if true, set lifted to true
+                print("clicked")
+            
+
+    def move(self, x, y):
+        if self.lifted == True:#if islifed is true, set self.xpos to x, and self.ypos to y
+            self.xpos = x
+            self.ypos = y
+
+#Pieces End-----------------------------------------------------------
+      
+        
+
+
+
+
+
+class pawn(pieces):
+    def draw():
+        pass
+        
+        
+#MAP:
+map = [[3, 4, 5, 6, 7, 5, 4, 3],
+       
+       [2, 2, 2, 2, 2, 2, 2, 2],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [1, 1, 1, 1, 1, 1, 1, 1],
+       
+       [8, 9, 10, 11, 12, 10, 9, 8]]
+
+
+
+
+red_pawn = pygame.image.load('RedPawn2.png') #load your spritesheet
+white_pawn = pygame.image.load('WhitePawn.png') #load your spritesheet
+background = pygame.image.load('Chess board.png')#loads background
+whiterook = pygame.image.load('WhiteRook.png')
+redrook = pygame.image.load('RedRook2.png')
+whitequeen = pygame.image.load('WhiteQueen.png')
+redqueen = pygame.image.load('RedQueen.png')
+whiteking = pygame.image.load('WhiteKing.png')
+redking = pygame.image.load('RedKing3.png')
+whitebishop = pygame.image.load('WhiteBishop.png')
+redbishop = pygame.image.load('RedBishop.png')
+redknight = pygame.image.load('RedKnight.png')
+whiteknight = pygame.image.load('WhiteKnight.png')
+
+
+while not checkmate:
+    clock.tick(60) 
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            checkmate = True
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if pygame.MOUSEBUTTONDOWN==1:
+                print("click")
+        if event.type == pygame.MOUSEMOTION: #check if mouse moved
+            mousePos = event.pos #refreshes mouse position
+            print("mouse position: (",mousePos[0]," , ",mousePos[1], ")")
+    #print(t)
+   #pieces()
+    
+    #COLLISION
+
+    #print to screen
+    #TheTime = countdown(t)
+    #add a ticker variable here, add 1 to it, when it hits 60, decrement t and reset timer
+    t-=1
+    text = font.render(str(t), True, (0,255,0))
+    print(t)
+    textRect = text.get_rect()
+    textRect.center = (810, 50)
+
+    # RENDER--------------------------------------------------------------------------------
+    screen.fill((0,0,0)) #wipe screen so it doesn't smear
+    screen.blit(background, (0,0))
+    for i in range (8):
+        for j in range(8):
+            if map[i][j]==1:
+                screen.blit(red_pawn, (j*100, i*100), (0, 0, 100, 100))
+                pygame.draw.rect(screen, white,[j*100, i*100, 20, 20],1)
+            if map[i][j]==2:
+                screen.blit(white_pawn, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==3:
+                screen.blit(whiterook, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==4:
+                screen.blit(whiteknight, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==5:
+                screen.blit(whitebishop, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==6:
+                screen.blit(whitequeen, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==7:
+                screen.blit(whiteking, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==8:
+                screen.blit(redrook, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==9:
+                screen.blit(redknight, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==10:
+                screen.blit(redbishop, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==11:
+                screen.blit(redqueen, (j*100, i*100), (0, 0, 100, 100))
+            if map[i][j]==12:
+                screen.blit(redking, (j*100, i*100), (0, 0, 100, 100))
+    screen.blit(text, (900, 120))
+
+    pygame.display.flip()#this actually puts the pixel on the screen
+    
+    
+#end game loop------------------------------------------------------------------------------
+pygame.quit()
