@@ -1,0 +1,452 @@
+import pygame
+from math import *
+import time
+pygame.init()  
+pygame.display.set_caption("sprite sheet")  # sets the window title
+screen = pygame.display.set_mode((1000, 800))  # creates game screen
+screen.fill((0,0,0))
+clock = pygame.time.Clock() #set up clock
+
+
+red_pawn = pygame.image.load('RedPawn2.png') #load your spritesheet
+white_pawn = pygame.image.load('WhitePawn.png') #load your spritesheet
+background = pygame.image.load('Chess board.png')#loads background
+white_rook = pygame.image.load('WhiteRook.png')
+red_rook = pygame.image.load('RedRook2.png')
+white_queen = pygame.image.load('WhiteQueen.png')
+red_queen = pygame.image.load('RedQueen.png')
+white_king = pygame.image.load('WhiteKing.png')
+red_king = pygame.image.load('RedKing3.png')
+white_bishop = pygame.image.load('WhiteBishop.png')
+red_bishop = pygame.image.load('RedBishop.png')
+red_knight = pygame.image.load('RedKnight.png')
+white_knight = pygame.image.load('WhiteKnight.png')
+
+white=(255,255,255)
+PIECEWIDTH = 100
+#text to screen setup
+pygame.display.set_caption('Show Text')
+font = pygame.font.Font('freesansbold.ttf', 32)
+
+checkmate = False #variable to run our game loop
+whiteTurn = False
+hasPicked = False
+
+#text input------------------------------------------
+
+#n1 = input('Enter your name Comrades:')
+#n2 = input('Enter your name player 2')
+#print('Hello, ' +  n1)
+#print('Hello, ' + n2)
+#= int(input("enter time::::"))
+t = 100
+
+#End of text input----------------------------------
+
+
+#Timer---------------------------------------------------
+#def countdown(t):
+   
+ #  while t:
+#     mins, secs = divmod(t, 60)
+  #   timer = '{:02d}:{:02d}'.format(mins, secs)
+  #   print(timer, end="\r")
+  #   print('Spaghetti')  
+   #  time.sleep(1)
+   #  t -= 1
+   #  return t       
+   #
+#Timer end-------------------------------------------------
+#countdown(t)
+#text = font.render(countdown(int(t)), True, (0,255,0), (0,0,255))
+#Pieces start-----------------------------------------------
+class pieces:
+    def __init__(self,xpos,ypos, type):
+
+        self.xpos = xpos
+        self.ypos = ypos
+        self.lifted = False
+        self.type = type
+
+        #self.isWhite #save for later
+
+
+    def isClicked(self,x,y):
+            global hasPicked
+            print("checking distance")
+            if hasPicked == False and self.lifted == False:
+                if (sqrt(((self.xpos+50)-x)**2 + ((self.ypos+50)-y)**2)) <= 50:#check if the distance b/t (x, y) and (self.xpos, self.ypos) is LESS than 50
+                    self.lifted = True #if true, set lifted to true
+                    hasPicked = True
+                    print("lifted!")
+                else:
+                    print("no collision")
+                   
+            
+
+    def move(self, x, y):
+            if self.lifted == True:#if islifed is true, set self.xpos to x, and self.ypos to y
+                self.xpos = x-50
+                self.ypos = y-50
+
+
+    def draw(self):
+        #pawns
+        if self.type == "WhitePawn":
+            screen.blit(white_pawn, (self.xpos, self.ypos), (0, 0, 100, 100))
+        if self.type == "RedPawn":
+            screen.blit(red_pawn, (self.xpos, self.ypos), (0, 0, 100, 100))
+        #knights
+        if self.type == "WhiteKnight":
+            screen.blit(white_knight, (self.xpos, self.ypos), (0, 0, 100, 100))
+        if self.type == "RedKnight":
+            screen.blit(red_knight, (self.xpos, self.ypos), (0, 0, 100, 100))
+        #bishop
+        if self.type == "WhiteBishop":
+            screen.blit(white_bishop, (self.xpos, self.ypos), (0, 0, 100, 100))
+        if self.type == "RedBishop":
+            screen.blit(red_bishop, (self.xpos, self.ypos), (0, 0, 100, 100))
+        #rook
+        if self.type == "WhiteRook":
+            screen.blit(white_rook, (self.xpos, self.ypos), (0, 0, 100, 100))
+        if self.type == "RedRook":
+            screen.blit(red_rook, (self.xpos, self.ypos), (0, 0, 100, 100))
+        #king
+        if self.type == "WhiteKing":
+            screen.blit(white_king, (self.xpos, self.ypos), (0, 0, 100, 100))
+        if self.type == "RedKing":
+            screen.blit(red_king, (self.xpos, self.ypos), (0, 0, 100, 100))
+        #queen
+        if self.type == "WhiteQueen":
+            screen.blit(white_queen, (self.xpos, self.ypos), (0, 0, 100, 100))
+        if self.type == "RedQueen":
+            screen.blit(red_queen, (self.xpos, self.ypos), (0, 0, 100, 100))
+
+#Pieces End-----------------------------------------------------------
+
+
+
+
+WhitePawn1 = pieces(50, 100, "WhitePawn")
+WhitePawn2 = pieces(150, 100, "WhitePawn")
+WhitePawn3 = pieces(250, 100, "WhitePawn")
+WhitePawn4 = pieces(350, 100, "WhitePawn")
+WhitePawn5 = pieces(450, 100, "WhitePawn")
+WhitePawn6 = pieces(550, 100, "WhitePawn")
+WhitePawn7 = pieces(650, 100, "WhitePawn")
+WhitePawn8 = pieces(750, 100, "WhitePawn")
+
+RedPawn1 = pieces(0, 600, "RedPawn")
+RedPawn2 = pieces(100, 600, "RedPawn")
+RedPawn3 = pieces(200, 600, "RedPawn")
+RedPawn4 = pieces(300, 600, "RedPawn")
+RedPawn5 = pieces(400, 600, "RedPawn")
+RedPawn6 = pieces(500, 600, "RedPawn")
+RedPawn7 = pieces(600, 600, "RedPawn")
+RedPawn8 = pieces(700, 600, "RedPawn")
+
+WhiteRook1 = pieces(0, 0, "WhiteRook")
+WhiteRook2 = pieces(700, 0, "WhiteRook")
+
+RedRook1 = pieces(0, 700, "RedRook")
+RedRook2 = pieces(700, 700, "RedRook")
+
+WhiteKnight1 = pieces(100, 0, "WhiteKnight")
+WhiteKnight2 = pieces(600, 0, "WhiteKnight")
+
+RedKnight1 = pieces(100, 700, "RedKnight")
+RedKnight2 = pieces(600, 700, "RedKnight")
+
+WhiteBishop1 = pieces(200, 0, "WhiteBishop")
+WhiteBishop2 = pieces(500, 0, "WhiteBishop")
+
+RedBishop1 = pieces(200, 700, "RedBishop")
+RedBishop2 = pieces(500, 700, "RedB `ishop")
+
+WhiteKing = pieces(300, 0, "WhiteKing")
+RedKing = pieces(300, 700, "RedKing")
+
+
+WhiteQueen = pieces(400, 0, "WhiteQueen")
+RedQueen = pieces(400, 700, "RedQueen")
+
+        
+        
+#MAP:
+map = [[3, 4, 5, 6, 7, 5, 4, 3],
+       
+       [2, 2, 2, 2, 2, 2, 2, 2],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [1, 1, 1, 1, 1, 1, 1, 1],
+       
+       [8, 9, 10, 11, 12, 10, 9, 8]]
+
+
+#Variables and stuff (Start)---------------------------------------------------------------------------------------
+
+
+clicked = False
+
+
+#Variables and stuff (End)--------------------------------------------------------------------
+
+while not checkmate:
+    clock.tick(60) 
+    #print("clicked is ", clicked)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            checkmate = True
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if pygame.MOUSEBUTTONDOWN:
+                print("click")
+                if clicked == False:
+                    clicked = True
+                elif clicked == True:
+                    clicked = False
+        if event.type == pygame.MOUSEBUTTONUP:
+            print("unclick")
+            clicked = False
+        if event.type == pygame.MOUSEMOTION: #check if mouse moved
+            mousePos = event.pos #refreshes mouse position
+          #  print("mouse position: (",mousePos[0]," , ",mousePos[1], ")")
+    #print(t)
+   #pieces()
+    
+    #COLLISION
+
+    if clicked ==True:
+        if whiteTurn is True:
+            WhitePawn1.isClicked(mousePos[0],mousePos[1])
+            WhitePawn2.isClicked(mousePos[0],mousePos[1])
+            WhitePawn3.isClicked(mousePos[0],mousePos[1])
+            WhitePawn4.isClicked(mousePos[0],mousePos[1])
+            WhitePawn5.isClicked(mousePos[0],mousePos[1])
+            WhitePawn6.isClicked(mousePos[0],mousePos[1])
+            WhitePawn7.isClicked(mousePos[0],mousePos[1])
+            WhitePawn8.isClicked(mousePos[0],mousePos[1])
+
+            WhiteRook1.isClicked(mousePos[0],mousePos[1])
+            WhiteRook2.isClicked(mousePos[0],mousePos[1])
+
+            WhiteKnight1.isClicked(mousePos[0],mousePos[1])
+            WhiteKnight2.isClicked(mousePos[0],mousePos[1])
+        
+            WhiteBishop1.isClicked(mousePos[0],mousePos[1])
+            WhiteBishop2.isClicked(mousePos[0],mousePos[1])
+
+            WhiteKing.isClicked(mousePos[0],mousePos[1])
+            WhiteQueen.isClicked(mousePos[0],mousePos[1])
+
+        if whiteTurn is False:
+            RedPawn1.isClicked(mousePos[0],mousePos[1])
+            RedPawn2.isClicked(mousePos[0],mousePos[1])
+            RedPawn3.isClicked(mousePos[0],mousePos[1])
+            RedPawn4.isClicked(mousePos[0],mousePos[1])
+            RedPawn5.isClicked(mousePos[0],mousePos[1])
+            RedPawn6.isClicked(mousePos[0],mousePos[1])
+            RedPawn7.isClicked(mousePos[0],mousePos[1])
+            RedPawn8.isClicked(mousePos[0],mousePos[1])
+
+            RedRook1.isClicked(mousePos[0],mousePos[1])
+            RedRook2.isClicked(mousePos[0],mousePos[1])
+
+            RedKnight1.isClicked(mousePos[0],mousePos[1])
+            RedKnight2.isClicked(mousePos[0],mousePos[1])
+        
+            RedBishop1.isClicked(mousePos[0],mousePos[1])
+            RedBishop2.isClicked(mousePos[0],mousePos[1])
+
+            RedKing.isClicked(mousePos[0],mousePos[1])
+            RedQueen.isClicked(mousePos[0],mousePos[1])
+
+    if clicked == False:
+        hasPicked = False
+        WhitePawn1.lifted = False
+        WhitePawn2.lifted = False
+        WhitePawn3.lifted = False
+        WhitePawn4.lifted = False
+        WhitePawn5.lifted = False
+        WhitePawn6.lifted = False
+        WhitePawn7.lifted = False
+        WhitePawn8.lifted = False
+
+        WhiteRook1.lifted = False
+        WhiteRook2.lifted = False
+
+        WhiteKnight1.lifted = False
+        WhiteKnight2.lifted = False
+
+        WhiteBishop1.lifted = False
+        WhiteBishop2.lifted = False
+
+        WhiteKing.lifted = False
+        WhiteQueen.lifted = False
+
+        RedPawn1.lifted = False
+        RedPawn2.lifted = False
+        RedPawn3.lifted = False
+        RedPawn4.lifted = False
+        RedPawn5.lifted = False
+        RedPawn6.lifted = False
+        RedPawn7.lifted = False
+        RedPawn8.lifted = False
+
+        RedRook1.lifted = False
+        RedRook2.lifted = False
+
+        RedKnight1.lifted = False
+        RedKnight2.lifted = False
+
+        RedBishop1.lifted = False
+        RedBishop2.lifted = False
+
+        RedKing.lifted = False
+        RedQueen.lifted = False
+
+
+    WhitePawn1.move(mousePos[0],mousePos[1])
+    WhitePawn2.move(mousePos[0],mousePos[1])
+    WhitePawn3.move(mousePos[0],mousePos[1])
+    WhitePawn4.move(mousePos[0],mousePos[1])
+    WhitePawn5.move(mousePos[0],mousePos[1])
+    WhitePawn6.move(mousePos[0],mousePos[1])
+    WhitePawn7.move(mousePos[0],mousePos[1])
+    WhitePawn8.move(mousePos[0],mousePos[1])
+
+    WhiteRook1.move(mousePos[0],mousePos[1])
+    WhiteRook2.move(mousePos[0],mousePos[1])
+
+    WhiteKnight1.move(mousePos[0],mousePos[1])
+    WhiteKnight2.move(mousePos[0],mousePos[1])
+
+    WhiteBishop1.move(mousePos[0],mousePos[1])
+    WhiteBishop2.move(mousePos[0],mousePos[1])
+
+    WhiteKing.move(mousePos[0],mousePos[1])
+    WhiteQueen.move(mousePos[0],mousePos[1])
+    
+    RedPawn1.move(mousePos[0],mousePos[1])
+    RedPawn2.move(mousePos[0],mousePos[1])
+    RedPawn3.move(mousePos[0],mousePos[1])
+    RedPawn4.move(mousePos[0],mousePos[1])
+    RedPawn5.move(mousePos[0],mousePos[1])
+    RedPawn6.move(mousePos[0],mousePos[1])
+    RedPawn7.move(mousePos[0],mousePos[1])
+    RedPawn8.move(mousePos[0],mousePos[1])
+
+    RedRook1.move(mousePos[0],mousePos[1])
+    RedRook2.move(mousePos[0],mousePos[1])
+
+    RedKnight1.move(mousePos[0],mousePos[1])
+    RedKnight2.move(mousePos[0],mousePos[1])
+
+    RedBishop1.move(mousePos[0],mousePos[1])
+    RedBishop2.move(mousePos[0],mousePos[1])
+
+    RedKing.move(mousePos[0],mousePos[1])
+    RedQueen.move(mousePos[0],mousePos[1])
+
+    
+    
+    
+    
+    #print to screen
+    #TheTime = countdown(t)
+    #add a ticker variable here, add 1 to it, when it hits 60, decrement t and reset time
+    #t-=1
+  #  text = font.render(str(t), True, (0,255,0))
+   # Name = font.render(str(n1), True, (255,255,255))
+    #print(t)
+  #  textRect = text.get_rect()
+   # name = Name.get_rect()
+   # textRect.center = (810, 50)
+   # name.center = (810, 250)
+
+
+    # RENDER--------------------------------------------------------------------------------
+    screen.fill((0,0,0)) #wipe screen so it doesn't smear
+    screen.blit(background, (0,0))
+
+
+
+    WhitePawn1.draw()
+    WhitePawn2.draw()
+    WhitePawn3.draw()
+    WhitePawn4.draw()
+    WhitePawn5.draw()
+    WhitePawn6.draw()
+    WhitePawn7.draw()
+    WhitePawn8.draw()
+
+    WhiteRook1.draw()
+    WhiteRook2.draw()
+    WhiteKnight1.draw()
+    WhiteKnight2.draw()
+    WhiteBishop1.draw()
+    WhiteBishop2.draw()
+    WhiteQueen.draw()
+    WhiteKing.draw()
+
+    RedPawn1.draw()
+    RedPawn2.draw()
+    RedPawn3.draw()
+    RedPawn4.draw()
+    RedPawn5.draw()
+    RedPawn6.draw()
+    RedPawn7.draw()
+    RedPawn8.draw()
+    RedRook1.draw()
+    RedRook2.draw()
+    RedKnight1.draw()
+    RedKnight2.draw()
+    RedBishop1.draw()
+    RedBishop2.draw()
+    RedQueen.draw()
+    RedKing.draw()
+    
+
+
+    
+    
+    #for i in range (8):
+    #    for j in range(8):
+    #        if map[i][j]==1:
+    #            screen.blit(red_pawn, (j*100, i*100), (0, 0, 100, 100))
+    #            pygame.draw.rect(screen, white,[j*100, i*100, 20, 20],1)
+    #        if map[i][j]==2:
+    #            screen.blit(white_pawn, (j*100, i*100), (0, 0, 100, 100))
+    #        if map[i][j]==3:
+    #            screen.blit(whiterook, (j*100, i*100), (0, 0, 100, 100))
+    #        if map[i][j]==4:
+    #            screen.blit(whiteknight, (j*100, i*100), (0, 0, 100, 100))
+    #        if map[i][j]==5:
+    #            screen.blit(whitebishop, (j*100, i*100), (0, 0, 100, 100))
+    #        if map[i][j]==6:
+    #            screen.blit(whitequeen, (j*100, i*100), (0, 0, 100, 100))
+    #        if map[i][j]==7:
+    #            screen.blit(whiteking, (j*100, i*100), (0, 0, 100, 100))
+    #        if map[i][j]==8:
+    #            screen.blit(redrook, (j*100, i*100), (0, 0, 100, 100))
+    #        if map[i][j]==9:
+    #            screen.blit(redknight, (j*100, i*100), (0, 0, 100, 100))
+    #        if map[i][j]==10:
+    #            screen.blit(redbishop, (j*100, i*100), (0, 0, 100, 100))
+    #        if map[i][j]==11:
+    #            screen.blit(redqueen, (j*100, i*100), (0, 0, 100, 100))
+    #        if map[i][j]==12:
+    #            screen.blit(redking, (j*100, i*100), (0, 0, 100, 100))
+    #screen.blit(text, (900, 120))
+
+    pygame.display.flip()#this actually puts the pixel on the screen
+    
+    
+#end game loop------------------------------------------------------------------------------
+pygame.quit()
