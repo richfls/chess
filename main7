@@ -1,0 +1,505 @@
+import pygame
+from math import *
+import time
+pygame.init()  
+pygame.display.set_caption("sprite sheet")  # sets the window title
+screen = pygame.display.set_mode((1000, 800))  # creates game screen
+screen.fill((0,0,0))
+clock = pygame.time.Clock() #set up clock
+
+#Variables and stuff (Start)-------------------------------------------------------------------
+red_pawn = pygame.image.load('RedPawn.png') #load your spritesheet
+white_pawn = pygame.image.load('WhitePawn.png') #load your spritesheet
+background = pygame.image.load('Chess board.png')#loads background
+white_rook = pygame.image.load('WhiteRook.png')
+red_rook = pygame.image.load('RedRook.png')
+white_queen = pygame.image.load('WhiteQueen.png')
+red_queen = pygame.image.load('RedQueen.png')
+white_king = pygame.image.load('WhiteKing.png')
+red_king = pygame.image.load('RedKing.png')
+white_bishop = pygame.image.load('WhiteBishop.png')
+red_bishop = pygame.image.load('RedBishop.png')
+red_knight = pygame.image.load('RedKnight.png')
+white_knight = pygame.image.load('WhiteKnight.png')
+
+White=(255,255,255)
+PIECEWIDTH = 100
+checkmate = False #variable to run our game loop
+whiteturn = False
+hasPicked = False
+clicked = False
+TurnNum=0
+
+t = 600
+
+pygame.display.set_caption('Show Text')
+font = pygame.font.Font('freesansbold.ttf', 32)
+#Variables and stuff (End)--------------------------------------------------------------------
+#text to screen setup
+
+#text input------------------------------------------
+
+#n1 = input('Enter your name Comrades:')
+#n2 = input('Enter your name player 2')
+#print('Hello, ' +  n1)
+#print('Hello, ' + n2)
+#= int(input("enter time::::"))
+
+#End of text input----------------------------------
+
+
+
+#Pieces start-----------------------------------------------
+class pieces:
+    def __init__(self,xpos,ypos,type):
+
+        self.xpos = xpos
+        self.ypos = ypos
+        self.lifted = False
+        self.type = type
+        self.alive = True    
+        self.row=0
+        self.column=0
+
+
+    def updatePos(self):
+        self.row = int(self.xpos/100)
+        self.column = int(self.ypos/100)
+        print("my row and column is ", self.row, self.column)
+        self.xpos = self.row*100
+        self.ypos = self.column*100
+
+    #def isDead(self, x, y):
+    #    global whiteturn
+    #    if self.alive == True:
+    #        if whiteturn == True:
+    #            if (sqrt(((self.xpos+50)-self.xpos)**2 + ((self.ypos+50)-self.ypos)**2)) <= 50:
+    #                self.alive = False
+    #                print("collidsusususs")
+    #        elif whiteturn == False:
+    #            if (sqrt(((self.xpos+50)-self.xpos)**2 + ((self.ypos+50)-self.ypos)**2)):
+    #                self.alive = False
+    #                print("collidsusususs")
+    #    if self.alive == False:
+    #        piece.kill()
+    #def matrix(self):
+
+
+    def isClicked(self,x,y):
+            #isDead()
+            global hasPicked
+            global TurnNum
+            print("checking distance")
+            if self.alive == True:
+                if hasPicked == False and self.lifted == False:
+                    if (sqrt(((self.xpos+50)-x)**2 + ((self.ypos+50)-y)**2)) <= 50:#check if the distance b/t (x, y) and (self.xpos, self.ypos) is LESS than 50
+                        self.lifted = True #if true, set lifted to true
+                        hasPicked = True
+                        TurnNum+=1
+                        print("lifted!")
+                    else:
+                        print("no collision")
+                   
+
+    def move(self, x, y):
+            if self.lifted == True:#if islifed is true, set self.xpos to x, and self.ypos to y
+                self.xpos = x-50
+                self.ypos = y-50
+
+
+    def draw(self):
+        if self.alive == True:
+            #pawns
+            if self.type == "WhitePawn":
+                screen.blit(white_pawn, (self.xpos, self.ypos), (0, 0, 100, 100))
+            if self.type == "RedPawn":
+                screen.blit(red_pawn, (self.xpos, self.ypos), (0, 0, 100, 100))
+            #knights
+            if self.type == "WhiteKnight":
+                screen.blit(white_knight, (self.xpos, self.ypos), (0, 0, 100, 100))
+            if self.type == "RedKnight":
+                screen.blit(red_knight, (self.xpos, self.ypos), (0, 0, 100, 100))
+            #bishop
+            if self.type == "WhiteBishop":
+                screen.blit(white_bishop, (self.xpos, self.ypos), (0, 0, 100, 100))
+            if self.type == "RedBishop":
+                screen.blit(red_bishop, (self.xpos, self.ypos), (0, 0, 100, 100))
+            #rook
+            if self.type == "WhiteRook":
+                screen.blit(white_rook, (self.xpos, self.ypos), (0, 0, 100, 100))
+            if self.type == "RedRook":
+                screen.blit(red_rook, (self.xpos, self.ypos), (0, 0, 100, 100))
+            #king
+            if self.type == "WhiteKing":
+                screen.blit(white_king, (self.xpos, self.ypos), (0, 0, 100, 100))
+            if self.type == "RedKing":
+                screen.blit(red_king, (self.xpos, self.ypos), (0, 0, 100, 100))
+            #queen
+            if self.type == "WhiteQueen":
+                screen.blit(white_queen, (self.xpos, self.ypos), (0, 0, 100, 100))
+            if self.type == "RedQueen":
+                screen.blit(red_queen, (self.xpos, self.ypos), (0, 0, 100, 100))
+
+#Pieces End-----------------------------------------------------------
+
+#python list (like a vector)
+whitelist = []
+redlist = []
+
+#White Pawns
+WhitePawn1 = pieces(0, 100, "WhitePawn")
+whitelist.append(WhitePawn1)
+WhitePawn2 = pieces(100, 100, "WhitePawn")
+whitelist.append(WhitePawn2)
+WhitePawn3 = pieces(200, 100, "WhitePawn")
+whitelist.append(WhitePawn3)
+WhitePawn4 = pieces(300, 100, "WhitePawn")
+whitelist.append(WhitePawn4)
+WhitePawn5 = pieces(400, 100, "WhitePawn")
+whitelist.append(WhitePawn5)
+WhitePawn6 = pieces(500, 100, "WhitePawn")
+whitelist.append(WhitePawn6)
+WhitePawn7 = pieces(600, 100, "WhitePawn")
+whitelist.append(WhitePawn7)
+WhitePawn8 = pieces(700, 100, "WhitePawn")
+whitelist.append(WhitePawn8)
+#Red Pawns
+RedPawn1 = pieces(0, 600, "RedPawn")
+redlist.append(RedPawn1)
+RedPawn2 = pieces(100, 600, "RedPawn")
+redlist.append(RedPawn2)
+RedPawn3 = pieces(200, 600, "RedPawn")
+redlist.append(RedPawn3)
+RedPawn4 = pieces(300, 600, "RedPawn")
+redlist.append(RedPawn4)
+RedPawn5 = pieces(400, 600, "RedPawn")
+redlist.append(RedPawn5)
+RedPawn6 = pieces(500, 600, "RedPawn")
+redlist.append(RedPawn6)
+RedPawn7 = pieces(600, 600, "RedPawn")
+redlist.append(RedPawn7)
+RedPawn8 = pieces(700, 600, "RedPawn")
+redlist.append(RedPawn8)
+#White Rooks
+WhiteRook1 = pieces(0, 0, "WhiteRook")
+whitelist.append(WhiteRook1)
+WhiteRook2 = pieces(700, 0, "WhiteRook")
+whitelist.append(WhiteRook2)
+#Red Rooks
+RedRook1 = pieces(0, 700, "RedRook")
+redlist.append(RedRook1)
+RedRook2 = pieces(700, 700, "RedRook")
+redlist.append(RedRook2)
+#White Knights
+WhiteKnight1 = pieces(100, 0, "WhiteKnight")
+whitelist.append(WhiteKnight1)
+WhiteKnight2 = pieces(600, 0, "WhiteKnight")
+whitelist.append(WhiteKnight2)
+#Red Knights
+RedKnight1 = pieces(100, 700, "RedKnight")
+redlist.append(RedKnight1)
+RedKnight2 = pieces(600, 700, "RedKnight")
+redlist.append(RedKnight2)
+#White Bishops
+WhiteBishop1 = pieces(200, 0, "WhiteBishop")
+whitelist.append(WhiteBishop1)
+WhiteBishop2 = pieces(500, 0, "WhiteBishop")
+whitelist.append(WhiteBishop2)
+#Red Bishop
+RedBishop1 = pieces(200, 700, "RedBishop")
+redlist.append(RedBishop1)
+RedBishop2 = pieces(500, 700, "RedBishop")
+redlist.append(RedBishop2)
+#White and Red King
+WhiteKing = pieces(300, 0, "WhiteKing")
+whitelist.append(WhiteKing)
+RedKing = pieces(300, 700, "RedKing")
+redlist.append(RedKing)
+#White and Red Queen
+WhiteQueen = pieces(400, 0, "WhiteQueen")
+whitelist.append(WhiteQueen)
+RedQueen = pieces(400, 700, "RedQueen")
+redlist.append(RedQueen)
+
+#MAP:
+map = [[3, 4, 5, 6, 7, 5, 4, 3],
+       
+       [2, 2, 2, 2, 2, 2, 2, 2],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [1, 1, 1, 1, 1, 1, 1, 1],
+       
+       [8, 9, 10, 11, 12, 10, 9, 8]]
+
+while not checkmate:
+    
+
+    clock.tick(60)
+    #print("clicked is ", clicked)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            checkmate = True
+           
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if pygame.MOUSEBUTTONDOWN:
+                print("click")
+                if clicked == False:
+                    clicked = True
+                elif clicked == True:
+                    clicked = False
+                   
+        if event.type == pygame.MOUSEBUTTONUP:
+            print("unclick")
+            clicked = False
+           
+        if event.type == pygame.MOUSEMOTION: #check if mouse moved
+            mousePos = event.pos #refreshes mouse position
+          #  print("mouse position: (",mousePos[0]," , ",mousePos[1], ")")
+   
+    #COLLISION
+         
+    #for i in whitelist:
+      #  for u in redlist:
+        #    if whitelist[i] == redlist[u]:
+          #      del redlist[u]
+    
+    for i in range(len(whitelist)):
+        whitelist[i].updatePos()
+    #WhitePawn1.updatePos()      
+
+    if clicked ==True:
+     
+        if whiteturn is True:# if whiteturn is true white pieces go
+            #White Pawns
+            WhitePawn1.isClicked(mousePos[0],mousePos[1])
+            WhitePawn2.isClicked(mousePos[0],mousePos[1])
+            WhitePawn3.isClicked(mousePos[0],mousePos[1])
+            WhitePawn4.isClicked(mousePos[0],mousePos[1])
+            WhitePawn5.isClicked(mousePos[0],mousePos[1])
+            WhitePawn6.isClicked(mousePos[0],mousePos[1])
+            WhitePawn7.isClicked(mousePos[0],mousePos[1])
+            WhitePawn8.isClicked(mousePos[0],mousePos[1])
+            #White Rooks
+            WhiteRook1.isClicked(mousePos[0],mousePos[1])
+            WhiteRook2.isClicked(mousePos[0],mousePos[1])
+            #White Knights
+            WhiteKnight1.isClicked(mousePos[0],mousePos[1])
+            WhiteKnight2.isClicked(mousePos[0],mousePos[1])
+            #White Bishops
+            WhiteBishop1.isClicked(mousePos[0],mousePos[1])
+            WhiteBishop2.isClicked(mousePos[0],mousePos[1])
+            #White King and Queen
+            WhiteKing.isClicked(mousePos[0],mousePos[1])
+            WhiteQueen.isClicked(mousePos[0],mousePos[1])
+
+        if whiteturn is False: # if whiteturn is false red goes
+            #Red Pawns
+            RedPawn1.isClicked(mousePos[0],mousePos[1])
+            RedPawn2.isClicked(mousePos[0],mousePos[1])
+            RedPawn3.isClicked(mousePos[0],mousePos[1])
+            RedPawn4.isClicked(mousePos[0],mousePos[1])
+            RedPawn5.isClicked(mousePos[0],mousePos[1])
+            RedPawn6.isClicked(mousePos[0],mousePos[1])
+            RedPawn7.isClicked(mousePos[0],mousePos[1])
+            RedPawn8.isClicked(mousePos[0],mousePos[1])
+            #Red Rooks
+            RedRook1.isClicked(mousePos[0],mousePos[1])
+            RedRook2.isClicked(mousePos[0],mousePos[1])
+            #Red Knights
+            RedKnight1.isClicked(mousePos[0],mousePos[1])
+            RedKnight2.isClicked(mousePos[0],mousePos[1])
+            #Red Bishops
+            RedBishop1.isClicked(mousePos[0],mousePos[1])
+            RedBishop2.isClicked(mousePos[0],mousePos[1])
+            #Red King and Queen
+            RedKing.isClicked(mousePos[0],mousePos[1])
+            RedQueen.isClicked(mousePos[0],mousePos[1])
+
+    if clicked == False:
+        hasPicked = False
+
+       
+        #if whiteturn:
+      #      print("whte's turn")
+       # else:
+        #    print("red's turn")
+        #White Pawns
+        WhitePawn1.lifted = False
+        WhitePawn2.lifted = False
+        WhitePawn3.lifted = False
+        WhitePawn4.lifted = False
+        WhitePawn5.lifted = False
+        WhitePawn6.lifted = False
+        WhitePawn7.lifted = False
+        WhitePawn8.lifted = False
+        #White Rooks
+        WhiteRook1.lifted = False
+        WhiteRook2.lifted = False
+        #White Knights
+        WhiteKnight1.lifted = False
+        WhiteKnight2.lifted = False
+        #White Bishops
+        WhiteBishop1.lifted = False
+        WhiteBishop2.lifted = False
+        #White King and Queen
+        WhiteKing.lifted = False
+        WhiteQueen.lifted = False
+        #Red Pawns
+        RedPawn1.lifted = False
+        RedPawn2.lifted = False
+        RedPawn3.lifted = False
+        RedPawn4.lifted = False
+        RedPawn5.lifted = False
+        RedPawn6.lifted = False
+        RedPawn7.lifted = False
+        RedPawn8.lifted = False
+        #Red Rooks
+        RedRook1.lifted = False
+        RedRook2.lifted = False
+        #Red Knights
+        RedKnight1.lifted = False
+        RedKnight2.lifted = False
+        #Red Bishops
+        RedBishop1.lifted = False
+        RedBishop2.lifted = False
+        #Red King and Queen
+        RedKing.lifted = False
+        RedQueen.lifted = False
+
+    #White Pawns
+    WhitePawn1.move(mousePos[0],mousePos[1])
+    WhitePawn2.move(mousePos[0],mousePos[1])
+    WhitePawn3.move(mousePos[0],mousePos[1])
+    WhitePawn4.move(mousePos[0],mousePos[1])
+    WhitePawn5.move(mousePos[0],mousePos[1])
+    WhitePawn6.move(mousePos[0],mousePos[1])
+    WhitePawn7.move(mousePos[0],mousePos[1])
+    WhitePawn8.move(mousePos[0],mousePos[1])
+    #White Rooks
+    WhiteRook1.move(mousePos[0],mousePos[1])
+    WhiteRook2.move(mousePos[0],mousePos[1])
+    #White Knights
+    WhiteKnight1.move(mousePos[0],mousePos[1])
+    WhiteKnight2.move(mousePos[0],mousePos[1])
+    #White Bishops
+    WhiteBishop1.move(mousePos[0],mousePos[1])
+    WhiteBishop2.move(mousePos[0],mousePos[1])
+    #White King and Queen
+    WhiteKing.move(mousePos[0],mousePos[1])
+    WhiteQueen.move(mousePos[0],mousePos[1])
+    #Red Pawns
+    RedPawn1.move(mousePos[0],mousePos[1])
+    RedPawn2.move(mousePos[0],mousePos[1])
+    RedPawn3.move(mousePos[0],mousePos[1])
+    RedPawn4.move(mousePos[0],mousePos[1])
+    RedPawn5.move(mousePos[0],mousePos[1])
+    RedPawn6.move(mousePos[0],mousePos[1])
+    RedPawn7.move(mousePos[0],mousePos[1])
+    RedPawn8.move(mousePos[0],mousePos[1])
+    #Red Rooks
+    RedRook1.move(mousePos[0],mousePos[1])
+    RedRook2.move(mousePos[0],mousePos[1])
+    #Red Knight
+    RedKnight1.move(mousePos[0],mousePos[1])
+    RedKnight2.move(mousePos[0],mousePos[1])
+    #Red Bishops
+    RedBishop1.move(mousePos[0],mousePos[1])
+    RedBishop2.move(mousePos[0],mousePos[1])
+    #Red King and Queen
+    RedKing.move(mousePos[0],mousePos[1])
+    RedQueen.move(mousePos[0],mousePos[1])
+
+   
+
+   
+    #print to screen
+    #TheTime = countdown(t)
+    #add a ticker variable here, add 1 to it, when it hits 60, decrement t and reset time
+    #t-=1
+  #  text = font.render(str(t), True, (0,255,0))
+   # Name = font.render(str(n1), True, (255,255,255))
+    #print(t)
+  #  textRect = text.get_rect()
+   # name = Name.get_rect()
+   # textRect.center = (810, 50)
+   # name.center = (810, 250)
+       
+    for i in range(len(whitelist)):
+       for j in range(len(redlist)):
+           if (whitelist[i].row == redlist[j].row):
+            if whitelist[i].column == redlist[j].column:
+               #del redlist[j]
+               redlist[j].alive=False
+               print(redlist[j].type, "got killed")
+
+          #for i in range(len(whitelist)):
+        #whitelist[i].updatePos()
+    #WhitePawn1.updatePos()
+
+
+
+    # RENDER--------------------------------------------------------------------------------
+    screen.fill((0,0,0)) #wipe screen so it doesn't smear
+    screen.blit(background, (0,0))
+
+    if TurnNum % 2==0:
+        whiteturn=True
+        print("white's turn")
+    else:
+        print("red's turn")
+        whiteturn = False
+    print("Turn Num:", TurnNum)
+   
+    WhitePawn1.draw()
+    WhitePawn2.draw()
+    WhitePawn3.draw()
+    WhitePawn4.draw()
+    WhitePawn5.draw()
+    WhitePawn6.draw()
+    WhitePawn7.draw()
+    WhitePawn8.draw()
+
+    WhiteRook1.draw()
+    WhiteRook2.draw()
+    WhiteKnight1.draw()
+    WhiteKnight2.draw()
+    WhiteBishop1.draw()
+    WhiteBishop2.draw()
+    WhiteQueen.draw()
+    WhiteKing.draw()
+
+    RedPawn1.draw()
+    RedPawn2.draw()
+    RedPawn3.draw()
+    RedPawn4.draw()
+    RedPawn5.draw()
+    RedPawn6.draw()
+    RedPawn7.draw()
+    RedPawn8.draw()
+    RedRook1.draw()
+    RedRook2.draw()
+    RedKnight1.draw()
+    RedKnight2.draw()
+    RedBishop1.draw()
+    RedBishop2.draw()
+    RedQueen.draw()
+    RedKing.draw()
+   
+    #for i in range (8):
+    #    for j in range(8):
+    #        if map[i][j]==1:
+    #            screen.blit(red_pawn, (j*100, i*100), (0, 0, 100, 100))
+    #            pygame.draw.rect(screen, white,[j*100, i*100, 20, 20],1)
+
+    pygame.display.flip()#this actually puts the pixel on the screen
+   
+   
+#end game loop------------------------------------------------------------------------------
+pygame.quit()
