@@ -1,0 +1,331 @@
+import pygame
+from math import *
+import time
+pygame.init()  
+pygame.display.set_caption("sprite sheet")  # sets the window title
+screen = pygame.display.set_mode((1000, 800))  # creates game screen
+screen.fill((0,0,0))
+clock = pygame.time.Clock() #set up clock
+
+#Variables and stuff (Start)-------------------------------------------------------------------
+red_pawn = pygame.image.load('RedPawn.png') #load your spritesheet
+white_pawn = pygame.image.load('WhitePawn.png') #load your spritesheet
+background = pygame.image.load('Chess board.png')#loads background
+white_rook = pygame.image.load('WhiteRook.png')
+red_rook = pygame.image.load('RedRook.png')
+white_queen = pygame.image.load('WhiteQueen.png')
+red_queen = pygame.image.load('RedQueen.png')
+white_king = pygame.image.load('WhiteKing.png')
+red_king = pygame.image.load('RedKing.png')
+white_bishop = pygame.image.load('WhiteBishop.png')
+red_bishop = pygame.image.load('RedBishop.png')
+red_knight = pygame.image.load('RedKnight.png')
+white_knight = pygame.image.load('WhiteKnight.png')
+
+White=(255,255,255)
+PIECEWIDTH = 100
+checkmate = False #variable to run our game loop
+whiteturn = True
+hasPicked = False
+clicked = False
+TurnNum=0
+ticks = 0
+t = 600
+
+pygame.display.set_caption('Show Text')
+font = pygame.font.Font('freesansbold.ttf', 32)
+#Variables and stuff (End)--------------------------------------------------------------------
+#text to screen setup
+
+#text input------------------------------------------
+
+n1 = input('Enter your name Comrades:')
+#n2 = input('Enter your name player 2')
+#print('Hello, ' + n2)
+
+
+#End of text input----------------------------------
+
+#Pieces start-----------------------------------------------
+class pieces:
+    def __init__(self,xpos,ypos,type):
+        self.xpos = xpos
+        self.ypos = ypos
+        self.lifted = False
+        self.type = type
+        self.alive = True    
+        self.row=0
+        self.column=0
+
+    def updatePos(self):
+        self.row = int(self.xpos/100)
+        self.column = int(self.ypos/100)
+        print("my row and column is ", self.row, self.column)
+        self.xpos = self.row*100 
+        self.ypos = self.column*100 
+        
+    def isClicked(self,x,y):
+            global hasPicked
+            global TurnNum
+            print("checking distance")
+            if self.alive == True:
+                if hasPicked == False and self.lifted == False:
+                    if (sqrt(((self.xpos+50)-x)**2 + ((self.ypos+50)-y)**2)) <= 50:#check if the distance b/t (x, y) and (self.xpos, self.ypos) is LESS than 50
+                        self.lifted = True #if true, set lifted to true
+                        hasPicked = True
+                        TurnNum+=1
+                        print("lifted!")
+                    else:
+                        print("no collision")
+                   
+
+    def move(self, x, y):
+            if self.lifted == True:#if islifed is true, set self.xpos to x, and self.ypos to y
+                self.xpos = x-50
+                self.ypos = y-50
+
+
+    def draw(self):
+        if self.alive == True:
+            #pawns
+            if self.type == "WhitePawn":
+                screen.blit(white_pawn, (self.xpos, self.ypos), (0, 0, 100, 100))
+            if self.type == "RedPawn":
+                screen.blit(red_pawn, (self.xpos, self.ypos), (0, 0, 100, 100))
+            #knights
+            if self.type == "WhiteKnight":
+                screen.blit(white_knight, (self.xpos, self.ypos), (0, 0, 100, 100))
+            if self.type == "RedKnight":
+                screen.blit(red_knight, (self.xpos, self.ypos), (0, 0, 100, 100))
+            #bishop
+            if self.type == "WhiteBishop":
+                screen.blit(white_bishop, (self.xpos, self.ypos), (0, 0, 100, 100))
+            if self.type == "RedBishop":
+                screen.blit(red_bishop, (self.xpos, self.ypos), (0, 0, 100, 100))
+            #rook
+            if self.type == "WhiteRook":
+                screen.blit(white_rook, (self.xpos, self.ypos), (0, 0, 100, 100))
+            if self.type == "RedRook":
+                screen.blit(red_rook, (self.xpos, self.ypos), (0, 0, 100, 100))
+            #king
+            if self.type == "WhiteKing":
+                screen.blit(white_king, (self.xpos, self.ypos), (0, 0, 100, 100))
+            if self.type == "RedKing":
+                screen.blit(red_king, (self.xpos, self.ypos), (0, 0, 100, 100))
+            #queen
+            if self.type == "WhiteQueen":
+                screen.blit(white_queen, (self.xpos, self.ypos), (0, 0, 100, 100))
+            if self.type == "RedQueen":
+                screen.blit(red_queen, (self.xpos, self.ypos), (0, 0, 100, 100))
+
+#Pieces End-----------------------------------------------------------
+
+#python list (like a vector)
+whitelist = []
+redlist = []
+
+#White Pawns
+WhitePawn1 = pieces(0, 100, "WhitePawn")
+whitelist.append(WhitePawn1)
+WhitePawn2 = pieces(100, 100, "WhitePawn")
+whitelist.append(WhitePawn2)
+WhitePawn3 = pieces(200, 100, "WhitePawn")
+whitelist.append(WhitePawn3)
+WhitePawn4 = pieces(300, 100, "WhitePawn")
+whitelist.append(WhitePawn4)
+WhitePawn5 = pieces(400, 100, "WhitePawn")
+whitelist.append(WhitePawn5)
+WhitePawn6 = pieces(500, 100, "WhitePawn")
+whitelist.append(WhitePawn6)
+WhitePawn7 = pieces(600, 100, "WhitePawn")
+whitelist.append(WhitePawn7)
+WhitePawn8 = pieces(700, 100, "WhitePawn")
+whitelist.append(WhitePawn8)
+#Red Pawns
+RedPawn1 = pieces(0, 600, "RedPawn")
+redlist.append(RedPawn1)
+RedPawn2 = pieces(100, 600, "RedPawn")
+redlist.append(RedPawn2)
+RedPawn3 = pieces(200, 600, "RedPawn")
+redlist.append(RedPawn3)
+RedPawn4 = pieces(300, 600, "RedPawn")
+redlist.append(RedPawn4)
+RedPawn5 = pieces(400, 600, "RedPawn")
+redlist.append(RedPawn5)
+RedPawn6 = pieces(500, 600, "RedPawn")
+redlist.append(RedPawn6)
+RedPawn7 = pieces(600, 600, "RedPawn")
+redlist.append(RedPawn7)
+RedPawn8 = pieces(700, 600, "RedPawn")
+redlist.append(RedPawn8)
+#White Rooks
+WhiteRook1 = pieces(0, 0, "WhiteRook")
+whitelist.append(WhiteRook1)
+WhiteRook2 = pieces(700, 0, "WhiteRook")
+whitelist.append(WhiteRook2)
+#Red Rooks
+RedRook1 = pieces(0, 700, "RedRook")
+redlist.append(RedRook1)
+RedRook2 = pieces(700, 700, "RedRook")
+redlist.append(RedRook2)
+#White Knights
+WhiteKnight1 = pieces(100, 0, "WhiteKnight")
+whitelist.append(WhiteKnight1)
+WhiteKnight2 = pieces(600, 0, "WhiteKnight")
+whitelist.append(WhiteKnight2)
+#Red Knights
+RedKnight1 = pieces(100, 700, "RedKnight")
+redlist.append(RedKnight1)
+RedKnight2 = pieces(600, 700, "RedKnight")
+redlist.append(RedKnight2)
+#White Bishops
+WhiteBishop1 = pieces(200, 0, "WhiteBishop")
+whitelist.append(WhiteBishop1)
+WhiteBishop2 = pieces(500, 0, "WhiteBishop")
+whitelist.append(WhiteBishop2)
+#Red Bishop
+RedBishop1 = pieces(200, 700, "RedBishop")
+redlist.append(RedBishop1)
+RedBishop2 = pieces(500, 700, "RedBishop")
+redlist.append(RedBishop2)
+#White and Red King
+WhiteKing = pieces(300, 0, "WhiteKing")
+whitelist.append(WhiteKing)
+RedKing = pieces(300, 700, "RedKing")
+redlist.append(RedKing)
+#White and Red Queen
+WhiteQueen = pieces(400, 0, "WhiteQueen")
+whitelist.append(WhiteQueen)
+RedQueen = pieces(400, 700, "RedQueen")
+redlist.append(RedQueen)
+
+#MAP:
+map = [[3, 4, 5, 6, 7, 5, 4, 3],
+       
+       [2, 2, 2, 2, 2, 2, 2, 2],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       
+       [1, 1, 1, 1, 1, 1, 1, 1],
+       
+       [8, 9, 10, 11, 12, 10, 9, 8]]
+
+while not checkmate:
+    
+
+    clock.tick(60)
+    #print("clicked is ", clicked)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            checkmate = True
+           
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if pygame.MOUSEBUTTONDOWN:
+                print("click")
+                if clicked == False:
+                    clicked = True
+                elif clicked == True:
+                    clicked = False
+                   
+        if event.type == pygame.MOUSEBUTTONUP:
+            print("unclick")
+            clicked = False
+           
+        if event.type == pygame.MOUSEMOTION: #check if mouse moved
+            mousePos = event.pos #refreshes mouse position
+          #  print("mouse position: (",mousePos[0]," , ",mousePos[1], ")")
+   
+    #COLLISION
+         
+    
+    #White updatepos
+    for i in range(len(whitelist)): 
+        whitelist[i].updatePos()
+    #red updatepos
+    for i in range(len(redlist)): 
+        redlist[i].updatePos()
+
+    if clicked ==True:
+     
+        if whiteturn is True:# if whiteturn is true white pieces go
+            #white clicked function
+            for i in range(len(whitelist)):
+                whitelist[i].isClicked(mousePos[0],mousePos[1])
+
+        if whiteturn is False: # if whiteturn is false red goes
+            #red clicked function
+            for i in range(len(redlist)):
+                redlist[i].isClicked(mousePos[0],mousePos[1])
+    if clicked == False:
+        hasPicked = False
+        #white pieces lifted set down
+        for i in range(len(whitelist)):
+            whitelist[i].lifted = False
+        #red piece lifted set down
+        for i in range(len(redlist)):
+            redlist[i].lifted = False
+    #White pieces move
+    for i in range(len(whitelist)):
+        whitelist[i].move(mousePos[0],mousePos[1])
+    #Red pieces move
+    for i in range(len(redlist)):
+        redlist[i].move(mousePos[0],mousePos[1])
+    
+
+   
+
+   
+    #print to screen
+    if t != 0:
+        if ticks%60==0:   #add a ticker variable here, add 1 to it, when it hits 60, decrement t and reset time
+            t-=1
+    text = font.render(str(t), True, (0,255,0))
+    textRect = text.get_rect()
+    textRect.center = (900, 0)
+    Name = font.render(str(n1), True, (255,255,255))
+    name = Name.get_rect()
+    name.center = (900, 100)
+       
+    for i in range(len(whitelist)):
+       for j in range(len(redlist)):
+            if whiteturn == False:
+                if whitelist[i].row/100 == redlist[j].row/100 and whitelist[i].column/100 == redlist[j].column/100:
+                    redlist[j].alive = False
+                    print(redlist[j].type, "got killed")
+            if whiteturn == True:
+                if redlist[j].row/100 == whitelist[i].row/100 and redlist[j].column/100 == whitelist[i].column/100:
+                    whitelist[i].alive = False
+                    print(whitelist[i].type, "got killed")
+                    
+    # RENDER--------------------------------------------------------------------------------
+    screen.fill((0,0,0)) #wipe screen so it doesn't smear
+    screen.blit(background, (0,0))
+
+    if TurnNum % 2==0:
+        whiteturn=True
+        print("white's turn")
+    else:
+        print("red's turn")
+        whiteturn = False
+    print("Turn Num:", TurnNum)
+    
+    
+    #draws white pieces
+    for i in range(len(whitelist)):
+            whitelist[i].draw()
+    #draws red pieces
+    for i in range(len(redlist)):
+            redlist[i].draw()
+    
+    screen.blit(Name, (900,50))
+    screen.blit(text, (900, 100))
+    pygame.display.flip()#this actually puts the pixel on the screen
+   
+#end game loop------------------------------------------------------------------------------
+pygame.quit()
